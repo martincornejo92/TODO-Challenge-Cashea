@@ -138,4 +138,4 @@ Permite:
 
 ---
 
-**Challenge by [Cashea](https://cashea.com)** 💛
+**Challenge by [Cashea](https://cashea.co)** 💛
