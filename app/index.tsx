@@ -18,7 +18,6 @@ import TaskItem from '../src/components/TaskItem';
 import { useTaskStore } from '../src/store/taskStore';
 import { Task } from '../src/types';
 
-// Asegúrate de tener el logo en la carpeta assets
 const LOGO_IMAGE = require('../assets/cashea-logo.png'); // Cambia esta ruta por la de tu logo
 
 function MainApp(): JSX.Element {
@@ -40,7 +39,6 @@ function MainApp(): JSX.Element {
 
   const filteredTasks = getFilteredTasks();
 
-  // Cargar tareas al iniciar la app
   useEffect(() => {
     loadTasks();
   }, []);
@@ -61,7 +59,6 @@ function MainApp(): JSX.Element {
   return `${dayName} ${day} de ${month} de ${year}`;
 };
 
-  // Mostrar errores
   useEffect(() => {
     if (error) {
       Alert.alert(
@@ -91,7 +88,6 @@ function MainApp(): JSX.Element {
       <View style={styles.container}>
         <Text style={styles.title}>Lista de Tareas</Text>
         
-        {/* Indicador de estado del servidor */}
         {!serverAvailable && (
           <View style={styles.offlineBanner}>
             <Text style={styles.offlineText}>
@@ -104,7 +100,6 @@ function MainApp(): JSX.Element {
         )}
 
         <View style={styles.dateCard}>
-          {/* <Icon name="event" size={20} color="#007AFF" /> */}
           <Text style={styles.dateCardText}>{getCurrentDateFormatted()}</Text>
         </View>
         
@@ -138,7 +133,6 @@ function MainApp(): JSX.Element {
           />
         )}
         
-        {/* Sección de estadísticas y logo */}
         <View style={styles.footer}>
           <View style={styles.stats}>
             <Text style={styles.statsText}>
@@ -150,7 +144,6 @@ function MainApp(): JSX.Element {
             {loading && <ActivityIndicator size="small" color="#007AFF" />}
           </View>
           
-          {/* Logo y crédito */}
           <View style={styles.logoContainer}>
             <Text style={styles.challengeText}>Challenge by</Text>
             <Image 

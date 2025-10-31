@@ -132,7 +132,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, onUpdateFilters }) => {
 
   return (
     <View style={styles.container}>
-      {/* Sección de Estado - Colapsable */}
       <TouchableOpacity 
         style={styles.sectionHeader}
         onPress={toggleStatusSection}
@@ -176,7 +175,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, onUpdateFilters }) => {
         </View>
       )}
 
-      {/* Sección de Prioridad - Colapsable */}
       <TouchableOpacity 
         style={styles.sectionHeader}
         onPress={togglePrioritySection}
@@ -236,7 +234,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, onUpdateFilters }) => {
         </View>
       )}
 
-      {/* Modal para selección de prioridad */}
       <Modal
         visible={priorityModalVisible}
         transparent={true}
@@ -270,13 +267,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, onUpdateFilters }) => {
           </View>
         </View>
       </Modal>
-
-      {/* Debug info */}
-      {/* <View style={styles.debugInfo}>
-        <Text style={styles.debugText}>
-          Filtros activos: Estado: {filters.status} | Prioridad: {filters.priority}
-        </Text>
-      </View> */}
     </View>
   );
 };

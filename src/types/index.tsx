@@ -17,7 +17,7 @@ export interface TaskFormData {
 
 export interface Filters {
   status: TaskStatus;
-  priority: PriorityFilter;  // Usa PriorityFilter que incluye 'all'
+  priority: PriorityFilter; 
 }
 
 export interface TaskStore {

@@ -2,15 +2,12 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 import { Task, TaskFormData } from '../types';
 
-// Configuración mejorada para debugging
 const getBaseURL = (): string => {
   if (__DEV__) {
-    // USA ESTA IP - LA QUE COMPARTISTE
-    const YOUR_LOCAL_IP = '192.168.100.28';
+    const YOUR_LOCAL_IP = '192.168.100.28'; //IP LOCAL DE LA MAQUINA
     
     console.log('🎯 Using your IP:', YOUR_LOCAL_IP);
     
-    // Para Expo Go siempre usa tu IP
     const url = `http://${YOUR_LOCAL_IP}:3001`;
     console.log('🔗 Final URL:', url);
     return url;
@@ -26,13 +23,12 @@ console.log('📱 Platform:', Platform.OS);
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 15000, // Aumentado timeout
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptor para debugging detallado
 api.interceptors.request.use(
   (config) => {
     console.log('📤 API Request:', config.method?.toUpperCase(), config.url);
@@ -76,7 +72,6 @@ api.interceptors.response.use(
 );
 
 export const taskAPI = {
-  // Obtener todas las tareas
   getAll: async (): Promise<Task[]> => {
     try {
       console.log('🔄 Fetching tasks from:', API_BASE_URL + '/tasks');
@@ -89,13 +84,11 @@ export const taskAPI = {
     }
   },
 
-  // Obtener tarea por ID
   getById: async (id: string): Promise<Task> => {
     const response = await api.get<Task>(`/tasks/${id}`);
     return response.data;
   },
 
-  // Crear nueva tarea
   create: async (task: TaskFormData): Promise<Task> => {
     const newTask: Task = {
       ...task,
@@ -107,25 +100,22 @@ export const taskAPI = {
     return response.data;
   },
 
-  // Actualizar tarea
+
   update: async (id: string, updates: Partial<Task>): Promise<Task> => {
     const response = await api.patch<Task>(`/tasks/${id}`, updates);
     return response.data;
   },
 
-  // Eliminar tarea
   delete: async (id: string): Promise<string> => {
     await api.delete(`/tasks/${id}`);
     return id;
   },
 
-  // Actualizar estado de completado
   toggleComplete: async (id: string, completed: boolean): Promise<Task> => {
     const response = await api.patch<Task>(`/tasks/${id}`, { completed });
     return response.data;
   },
 
-  // Verificar salud del servidor
   healthCheck: async (): Promise<boolean> => {
     try {
       console.log('🔍 Health check to:', API_BASE_URL + '/tasks');

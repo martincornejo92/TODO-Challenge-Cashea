@@ -39,12 +39,11 @@ export const useTaskStore = create<TaskStore>()(
       setError: (error: string | null) => set({ error }),
       setServerAvailable: (available: boolean) => set({ serverAvailable: available }),
 
-      // Cargar tareas desde la API con fallback a mock data
+
       loadTasks: async (): Promise<void> => {
         try {
           set({ loading: true, error: null });
           
-          // Primero verificamos si el servidor está disponible
           const isServerHealthy = await taskAPI.healthCheck();
           set({ serverAvailable: isServerHealthy });
 
@@ -52,7 +51,6 @@ export const useTaskStore = create<TaskStore>()(
             const tasks = await taskAPI.getAll();
             set({ tasks, loading: false, serverAvailable: true });
           } else {
-            // Usar datos mock si el servidor no está disponible
             set({ 
               tasks: mockTasks, 
               loading: false, 
@@ -73,7 +71,6 @@ export const useTaskStore = create<TaskStore>()(
         }
       },
 
-      // Agregar nueva tarea
       addTask: async (taskData: TaskFormData): Promise<void> => {
         try {
           set({ loading: true, error: null });
@@ -87,7 +84,6 @@ export const useTaskStore = create<TaskStore>()(
               loading: false,
             }));
           } else {
-            // Agregar localmente si el servidor no está disponible
             const newTask: Task = {
               ...taskData,
               id: Date.now().toString(),
@@ -108,7 +104,6 @@ export const useTaskStore = create<TaskStore>()(
         }
       },
 
-      // Alternar estado de completado
       toggleTask: async (taskId: string): Promise<void> => {
         try {
           const task = get().tasks.find(t => t.id === taskId);
@@ -124,7 +119,6 @@ export const useTaskStore = create<TaskStore>()(
               ),
             }));
           } else {
-            // Actualizar localmente
             set((state) => ({
               tasks: state.tasks.map(t =>
                 t.id === taskId ? { ...t, completed: !t.completed } : t
@@ -138,7 +132,6 @@ export const useTaskStore = create<TaskStore>()(
         }
       },
 
-      // Eliminar tarea
       deleteTask: async (taskId: string): Promise<void> => {
         try {
           const { serverAvailable } = get();
@@ -147,7 +140,6 @@ export const useTaskStore = create<TaskStore>()(
             await taskAPI.delete(taskId);
           }
           
-          // Siempre eliminar localmente
           set((state) => ({
             tasks: state.tasks.filter(task => task.id !== taskId),
           }));
@@ -158,33 +150,28 @@ export const useTaskStore = create<TaskStore>()(
         }
       },
 
-      // Actualizar filtros
       updateFilters: (newFilters: Partial<Filters>) => {
         set((state) => ({
           filters: { ...state.filters, ...newFilters },
         }));
       },
 
-      // Obtener tareas filtradas (computado)
+
       getFilteredTasks: (): Task[] => {
         const { tasks, filters } = get();
         
         return tasks.filter(task => {
-          // Filtrar por estado
           if (filters.status === 'completed' && !task.completed) return false;
           if (filters.status === 'pending' && task.completed) return false;
           
-          // Filtrar por prioridad
           if (filters.priority !== 'all' && task.priority !== filters.priority) return false;
           
           return true;
         });
       },
 
-      // Limpiar errores
       clearError: () => set({ error: null }),
 
-      // Reintentar conexión con el servidor
       retryConnection: async (): Promise<void> => {
         try {
           set({ loading: true, error: null });
