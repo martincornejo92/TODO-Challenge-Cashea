@@ -1,13 +1,6 @@
 {
   "tasks": [
     {
-      "id": "1",
-      "text": "Aprender React Native",
-      "completed": false,
-      "priority": "high",
-      "createdAt": "2024-01-15T10:00:00.000Z"
-    },
-    {
       "id": "2",
       "text": "Comprar víveres",
       "completed": true,
@@ -17,9 +10,16 @@
     {
       "id": "3",
       "text": "Hacer ejercicio",
-      "completed": false,
+      "completed": true,
       "priority": "low",
       "createdAt": "2024-01-16T08:00:00.000Z"
+    },
+    {
+      "text": "Nueva",
+      "priority": "high",
+      "id": "1761881265129",
+      "completed": true,
+      "createdAt": "2025-10-31T03:27:45.129Z"
     }
   ]
 }

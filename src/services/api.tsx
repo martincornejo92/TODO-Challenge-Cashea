@@ -2,64 +2,75 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 import { Task, TaskFormData } from '../types';
 
-// Para Android emulador: 10.0.2.2
-// Para iOS emulador: localhost
-// Para dispositivo físico: IP de tu computadora
+// Configuración mejorada para debugging
 const getBaseURL = (): string => {
   if (__DEV__) {
-    if (Platform.OS === 'android') {
-      return 'http://10.0.2.2:3001'; // Android emulator
-    } else if (Platform.OS === 'ios') {
-      return 'http://localhost:3001'; // iOS simulator
-    } else {
-      // Para web o casos específicos
-      return 'http://localhost:3001';
-    }
+    // USA ESTA IP - LA QUE COMPARTISTE
+    const YOUR_LOCAL_IP = '192.168.100.28';
+    
+    console.log('🎯 Using your IP:', YOUR_LOCAL_IP);
+    
+    // Para Expo Go siempre usa tu IP
+    const url = `http://${YOUR_LOCAL_IP}:3001`;
+    console.log('🔗 Final URL:', url);
+    return url;
   }
-  return 'http://localhost:3001'; // Production
+  return 'http://localhost:3001';
 };
+
 
 const API_BASE_URL = getBaseURL();
 
-console.log('API Base URL:', API_BASE_URL);
+console.log('🔄 API Base URL:', API_BASE_URL);
+console.log('📱 Platform:', Platform.OS);
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 15000, // Aumentado timeout
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptor para debugging
+// Interceptor para debugging detallado
 api.interceptors.request.use(
   (config) => {
-    console.log('API Request:', config.method?.toUpperCase(), config.url);
+    console.log('📤 API Request:', config.method?.toUpperCase(), config.url);
+    console.log('🔗 Full URL:', config.baseURL + config.url);
     return config;
   },
   (error) => {
-    console.error('API Request Error:', error);
+    console.error('❌ API Request Error:', error);
     return Promise.reject(error);
   }
 );
 
 api.interceptors.response.use(
   (response) => {
-    console.log('API Response:', response.status, response.config.url);
+    console.log('✅ API Response:', response.status, response.config.url);
+    console.log('📊 Data received:', response.data.length, 'tasks');
     return response;
   },
   (error) => {
-    console.error('API Response Error:', error.message);
-    console.error('URL:', error.config?.baseURL + error.config?.url);
+    console.error('❌ API Response Error:', error.message);
+    console.error('🔗 URL Attempted:', error.config?.baseURL + error.config?.url);
+    console.error('💻 Platform:', Platform.OS);
+    console.error('🔄 Full Error:', JSON.stringify(error, null, 2));
     
     if (error.code === 'ECONNREFUSED') {
+      console.log('🔍 Troubleshooting:');
+      console.log('1. Verify json-server is running: npm run server');
+      console.log('2. Check port 3001 is available');
+      console.log('3. For Android emulator, try: http://10.0.2.2:3001');
+      console.log('4. For iOS simulator, try: http://localhost:3001');
+      
       throw new Error('No se puede conectar al servidor. Verifica que json-server esté ejecutándose en el puerto 3001.');
     } else if (error.message.includes('Network Error')) {
       throw new Error('Error de red. Verifica tu conexión y que el servidor esté corriendo.');
     } else if (error.response) {
       throw new Error(`Error del servidor: ${error.response.status} - ${error.response.statusText}`);
     } else {
-      throw new Error('Error desconocido de conexión');
+      throw new Error('Error desconocido de conexión: ' + error.message);
     }
   }
 );
@@ -68,10 +79,12 @@ export const taskAPI = {
   // Obtener todas las tareas
   getAll: async (): Promise<Task[]> => {
     try {
+      console.log('🔄 Fetching tasks from:', API_BASE_URL + '/tasks');
       const response = await api.get<Task[]>('/tasks');
+      console.log('✅ Tasks loaded successfully:', response.data.length);
       return response.data;
     } catch (error) {
-      console.error('Error in getAll:', error);
+      console.error('❌ Error in getAll:', error);
       throw error;
     }
   },
@@ -115,10 +128,12 @@ export const taskAPI = {
   // Verificar salud del servidor
   healthCheck: async (): Promise<boolean> => {
     try {
+      console.log('🔍 Health check to:', API_BASE_URL + '/tasks');
       await api.get('/tasks');
+      console.log('✅ Server health check passed');
       return true;
     } catch (error) {
-      console.error('Health check failed:', error);
+      console.error('❌ Health check failed:', error);
       return false;
     }
   },

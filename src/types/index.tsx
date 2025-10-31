@@ -1,5 +1,6 @@
 export type Priority = 'high' | 'medium' | 'low';
 export type TaskStatus = 'all' | 'completed' | 'pending';
+export type PriorityFilter = 'all' | Priority;  // 'all' incluido aquí
 
 export interface Task {
   id: string;
@@ -16,7 +17,7 @@ export interface TaskFormData {
 
 export interface Filters {
   status: TaskStatus;
-  priority: Priority | 'all';
+  priority: PriorityFilter;  // Usa PriorityFilter que incluye 'all'
 }
 
 export interface TaskStore {

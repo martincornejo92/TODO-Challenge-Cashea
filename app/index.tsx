@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Icon, Provider as PaperProvider } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FilterBar from '../src/components/FilterBar';
 import TaskForm from '../src/components/TaskForm';
@@ -44,6 +44,22 @@ function MainApp(): JSX.Element {
   useEffect(() => {
     loadTasks();
   }, []);
+
+  const getCurrentDateFormatted = (): string => {
+  const date = new Date();
+  const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const months = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+  
+  const dayName = days[date.getDay()];
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  
+  return `${dayName} ${day} de ${month} de ${year}`;
+};
 
   // Mostrar errores
   useEffect(() => {
@@ -86,6 +102,11 @@ function MainApp(): JSX.Element {
             </TouchableOpacity>
           </View>
         )}
+
+        <View style={styles.dateCard}>
+          {/* <Icon name="event" size={20} color="#007AFF" /> */}
+          <Text style={styles.dateCardText}>{getCurrentDateFormatted()}</Text>
+        </View>
         
         <TaskForm onAddTask={addTask} loading={loading} />
         
@@ -258,4 +279,21 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
   },
+  dateCard: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#f0f8ff',
+  padding: 12,
+  marginHorizontal: 16,
+  marginVertical: 8,
+  borderRadius: 8,
+  borderLeftWidth: 4,
+  borderLeftColor: '#007AFF',
+},
+dateCardText: {
+  fontSize: 14,
+  color: '#007AFF',
+  fontWeight: '600',
+  marginLeft: 8,
+},
 });
